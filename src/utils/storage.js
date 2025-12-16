@@ -18,5 +18,10 @@ export const getGame = (id) => {
 
 export const getGames = () => {
     const games = localStorage.getItem('belot-games');
-    return games ? JSON.parse(games) : [];
+    try {
+        const parsed = games ? JSON.parse(games) : [];
+        return Array.isArray(parsed) ? parsed : [parsed];
+    } catch {
+        return [];
+    }
 };
