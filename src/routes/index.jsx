@@ -9,7 +9,7 @@ const AppRoutes = () => {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/menu" element={<GameMenu />} />
-                <Route path="/game/:id?" element={<CurrentGame />} />
+                <Route path="/game/:id" element={<CurrentGame />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter>
