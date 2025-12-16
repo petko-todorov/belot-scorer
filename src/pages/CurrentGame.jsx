@@ -29,6 +29,7 @@ const CurrentGame = () => {
         const us = Number(inputUs) || 0;
         const them = Number(inputThem) || 0;
 
+        if (!us && !them) return;
         setGame((prev) => {
             const updatedGame = {
                 ...prev,
@@ -78,8 +79,8 @@ const CurrentGame = () => {
             </div>
             <hr className="max-w-screen border-t-2 border-amber-700" />
             <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
-                <h1 className="text-center">{game.totalUs}</h1>
-                <h1 className="text-center">{game.totalThem}</h1>
+                <h1 className="text-center">{game.gamesWonUs}</h1>
+                <h1 className="text-center">{game.gamesWonThem}</h1>
             </div>
             <hr className="max-w-screen border-t-2 border-amber-700" />
             {roundsWithTotals.map((round, index) => (
@@ -96,25 +97,30 @@ const CurrentGame = () => {
                 </div>
             ))}
             <div className="grid grid-cols-2 items-center text-3xl py-1.5 font-bold">
-                <div className="text-center">
+                <div className="text-center pl-2">
                     <span>{totalUs}</span>
                     <span> -</span>
                     <input
-                        type="number"
+                        type="text"
                         value={inputUs}
                         onChange={(e) => setInputUs(e.target.value)}
                         placeholder="0"
                         className="w-[2ch] text-center inline-block"
                     />
                 </div>
-
-                <div className="flex justify-center items-center gap-1">
+                <button
+                    onClick={() => handleEditScore('us')}
+                    className="absolute left-174 p-1"
+                >
+                    ✏️
+                </button>
+                <div className="text-center pl-2">
                     <span>{totalThem}</span>
-                    <span>-</span>
+                    <span> -</span>
                     <input
                         type="text"
-                        value={inputThem}
-                        onChange={(e) => setInputThem(e.target.value)}
+                        value={inputUs}
+                        onChange={(e) => setInputUs(e.target.value)}
                         placeholder="0"
                         className="w-[2ch] text-center inline-block"
                     />
