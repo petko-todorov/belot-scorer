@@ -45,13 +45,13 @@ const GameMenu = () => {
                             <div className="flex justify-between items-center">
                                 <h3 className="text-xl">Ние</h3>
                                 <span className="font-bold text-3xl">
-                                    {game.totalUs}
+                                    {game.gamesWonUs}
                                 </span>
                             </div>
                             <div className="flex justify-between items-center">
                                 <h3 className="text-xl">Вие</h3>
                                 <span className="font-bold text-3xl">
-                                    {game.totalThem}
+                                    {game.gamesWonThem}
                                 </span>
                             </div>
                             <hr className="max-w-screen -mx-4 border-t-2 border-gray-300" />
