@@ -22,7 +22,7 @@ const CurrentGame = () => {
             id,
             date: new Date().toLocaleDateString('bg-BG'),
             teams: { us: 'Ние', them: 'Вие' },
-            currentGame: [],
+            rounds: [],
             gamesWonUs: 0,
             gamesWonThem: 0,
         };
@@ -64,8 +64,14 @@ const CurrentGame = () => {
         setGame((prev) => {
             const updatedGame = {
                 ...prev,
-                currentGame: [...prev.currentGame, { us, them }],
+                rounds: [...prev.rounds, { us, them }],
             };
+
+            if (totalUs >= 151) {
+                updatedGame.gamesWonUs += 1;
+            } else if (totalThem >= 151) {
+                updatedGame.gamesWonThem += 1;
+            }
 
             saveGame(updatedGame);
             return updatedGame;
@@ -78,7 +84,7 @@ const CurrentGame = () => {
     let runningUs = 0;
     let runningThem = 0;
 
-    for (const round of game.currentGame) {
+    for (const round of game.rounds) {
         roundsWithTotals.push({
             prevUs: runningUs,
             prevThem: runningThem,
@@ -89,8 +95,8 @@ const CurrentGame = () => {
         runningThem += round.them;
     }
 
-    const totalUs = game.currentGame.reduce((sum, round) => sum + round.us, 0);
-    const totalThem = game.currentGame.reduce(
+    const totalUs = game.rounds.reduce((sum, round) => sum + round.us, 0);
+    const totalThem = game.rounds.reduce(
         (sum, round) => sum + round.them,
         0
     );
@@ -163,7 +169,7 @@ const CurrentGame = () => {
                             <span className="text-center">-</span>
                             <input
                                 type="text"
-                                value={inputUs}
+                                value={inputThem}
                                 onChange={(e) => setInputThem(e.target.value)}
                                 onFocus={() => setActiveSide('them')}
                                 className="w-[4ch] bg-transparent text-left outline-none"
