@@ -1,5 +1,38 @@
 @import 'tailwindcss';
 
 html {
-    background-color: black;
+    position: relative;
+}
+
+html::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/bg.png');
+    background-size: cover;
+    background-position: center;
+    filter: blur(5px);
+    z-index: -1;
+}
+
+@font-face {
+    font-family: 'ZakirahsCasual';
+    src: url('ZakirahsCasual.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ZakirahsBold';
+    src: url('ZakirahsBold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@theme {
+    --font-casual: 'ZakirahsCasual', var(--font-sans);
+    --font-zakirah: 'ZakirahsBold', var(--font-sans);
 }
