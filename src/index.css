@@ -19,20 +19,12 @@ html::before {
 }
 
 @font-face {
-    font-family: 'ZakirahsCasual';
-    src: url('ZakirahsCasual.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'ZakirahsBold';
-    src: url('ZakirahsBold.ttf') format('truetype');
+    font-family: 'Pangolin-Regular';
+    src: url('/Pangolin-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @theme {
-    --font-casual: 'ZakirahsCasual', var(--font-sans);
-    --font-zakirah: 'ZakirahsBold', var(--font-sans);
+    --font-custom: 'Pangolin-Regular', var(--font-sans);
 }
