@@ -21,7 +21,7 @@ const NumericKeypad = ({ onNumberPress, onAdd }) => {
                     <button
                         key={btn}
                         onClick={() => onNumberPress(btn)}
-                        className="bg-stone-700 text-gray-100 text-2xl font-bold rounded-xl w-16 h-13"
+                        className="bg-stone-700 text-gray-100 text-xl font-bold rounded-xl w-11 h-11"
                     >
                         {btn === 'sign' ? '+/-' : btn === 'delete' ? '⌫' : btn}
                     </button>
@@ -30,7 +30,7 @@ const NumericKeypad = ({ onNumberPress, onAdd }) => {
 
             <button
                 onClick={onAdd}
-                className="bg-stone-700 text-gray-100 text-2xl font-bold rounded-xl w-16"
+                className="bg-stone-700 text-gray-100 text-4xl font-bold rounded-xl w-16"
             >
                 →
             </button>
