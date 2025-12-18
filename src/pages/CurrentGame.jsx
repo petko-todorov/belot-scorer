@@ -6,11 +6,6 @@ import NumericKeypad from '../components/NumericKeypad';
 const CurrentGame = () => {
     const { id } = useParams();
     const bottomRef = useRef(null);
-    const roundsWithTotals = [];
-
-    useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: 'auto' });
-    }, [roundsWithTotals]);
 
     const [activeSide, setActiveSide] = useState('us');
 
@@ -22,7 +17,14 @@ const CurrentGame = () => {
             id,
             date: new Date().toLocaleDateString('bg-BG'),
             teams: { us: 'Ние', them: 'Вие' },
-            rounds: [],
+            games: [
+                {
+                    gameNumber: 1,
+                    rounds: [],
+                    totalUs: 0,
+                    totalThem: 0,
+                },
+            ],
             gamesWonUs: 0,
             gamesWonThem: 0,
         };
@@ -59,19 +61,43 @@ const CurrentGame = () => {
     const handleAdd = () => {
         const us = Number(inputUs) || 0;
         const them = Number(inputThem) || 0;
-
         if (!us && !them) return;
+
         setGame((prev) => {
+            const games = [...prev.games];
+            const currentIndex = games.length - 1;
+            const currentGame = { ...games[currentIndex] };
+
+            currentGame.rounds = [...currentGame.rounds, { us, them }];
+            currentGame.totalUs += us;
+            currentGame.totalThem += them;
+
+            let gamesWonUs = prev.gamesWonUs;
+            let gamesWonThem = prev.gamesWonThem;
+
+            const gameEnded =
+                currentGame.totalUs >= 151 || currentGame.totalThem >= 151;
+
+            if (gameEnded) {
+                if (currentGame.totalUs >= 151) gamesWonUs++;
+                if (currentGame.totalThem >= 151) gamesWonThem++;
+
+                games.push({
+                    gameNumber: currentGame.gameNumber + 1,
+                    rounds: [],
+                    totalUs: 0,
+                    totalThem: 0,
+                });
+            }
+
+            games[currentIndex] = currentGame;
+
             const updatedGame = {
                 ...prev,
-                rounds: [...prev.rounds, { us, them }],
+                games,
+                gamesWonUs,
+                gamesWonThem,
             };
-
-            if (totalUs >= 151) {
-                updatedGame.gamesWonUs += 1;
-            } else if (totalThem >= 151) {
-                updatedGame.gamesWonThem += 1;
-            }
 
             saveGame(updatedGame);
             return updatedGame;
@@ -81,25 +107,30 @@ const CurrentGame = () => {
         setInputThem('');
     };
 
-    let runningUs = 0;
-    let runningThem = 0;
+    const currentGame = game.games[game.games.length - 1];
+    const roundsWithTotals = currentGame.rounds.reduce(
+        (acc, round) => {
+            const prevUs = acc.runningUs;
+            const prevThem = acc.runningThem;
 
-    for (const round of game.rounds) {
-        roundsWithTotals.push({
-            prevUs: runningUs,
-            prevThem: runningThem,
-            us: round.us,
-            them: round.them,
-        });
-        runningUs += round.us;
-        runningThem += round.them;
-    }
+            acc.list.push({
+                prevUs,
+                prevThem,
+                us: round.us,
+                them: round.them,
+            });
 
-    const totalUs = game.rounds.reduce((sum, round) => sum + round.us, 0);
-    const totalThem = game.rounds.reduce(
-        (sum, round) => sum + round.them,
-        0
-    );
+            acc.runningUs += round.us;
+            acc.runningThem += round.them;
+
+            return acc;
+        },
+        { runningUs: 0, runningThem: 0, list: [] }
+    ).list;
+
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: 'auto' });
+    }, [roundsWithTotals]);
 
     return (
         <main className="font-custom">
@@ -111,16 +142,18 @@ const CurrentGame = () => {
                         <h1></h1>
                     </div>
                     <hr />
+
                     <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
                         <h1 className="text-center">{game.teams.us}</h1>
                         <h1 className="text-center">{game.teams.them}</h1>
                     </div>
-                    <hr className="max-w-screen border-t-2 border-amber-700" />
+                    <hr className="border-t-2 border-amber-700" />
+
                     <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
                         <h1 className="text-center">{game.gamesWonUs}</h1>
                         <h1 className="text-center">{game.gamesWonThem}</h1>
                     </div>
-                    <hr className="max-w-screen border-t-2 border-amber-700" />
+                    <hr className="border-t-2 border-amber-700" />
                 </div>
 
                 <div className="flex-1 overflow-y-auto flex flex-col font-mon">
@@ -136,7 +169,8 @@ const CurrentGame = () => {
                                 <span className="text-center">-</span>
                                 <span className="text-left">{round.us}</span>
                             </div>
-                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center border-r border-black/10">
+
+                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center">
                                 <span className="text-right">
                                     {round.prevThem}
                                 </span>
@@ -150,7 +184,9 @@ const CurrentGame = () => {
 
                     <div className="grid grid-cols-2 items-center text-3xl py-1.5 font-bold">
                         <div className="grid grid-cols-[4ch_2ch_4ch] justify-center border-r border-black/10">
-                            <span className="text-right">{totalUs}</span>
+                            <span className="text-right">
+                                {currentGame.totalUs}
+                            </span>
                             <span className="text-center">-</span>
                             <input
                                 type="text"
@@ -161,11 +197,10 @@ const CurrentGame = () => {
                             />
                         </div>
 
-                        {/* <button onClick={() => handleEditScore('us')} className="">
-                        ✏️
-                        </button> */}
-                        <div className="grid grid-cols-[4ch_2ch_4ch] justify-center border-r border-black/10">
-                            <span className="text-right">{totalThem}</span>
+                        <div className="grid grid-cols-[4ch_2ch_4ch] justify-center">
+                            <span className="text-right">
+                                {currentGame.totalThem}
+                            </span>
                             <span className="text-center">-</span>
                             <input
                                 type="text"
@@ -176,6 +211,7 @@ const CurrentGame = () => {
                             />
                         </div>
                     </div>
+
                     <div className="shrink-0 mt-auto">
                         <NumericKeypad
                             onNumberPress={handleNumberPress}
