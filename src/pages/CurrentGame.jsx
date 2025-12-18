@@ -57,7 +57,6 @@ const CurrentGame = () => {
         });
     };
 
-
     const handleAdd = () => {
         const us = Number(inputUs) || 0;
         const them = Number(inputThem) || 0;
@@ -98,6 +97,7 @@ const CurrentGame = () => {
 
         setInputUs('');
         setInputThem('');
+        setActiveSide('us');
     };
 
     const currentGame = game.games[game.games.length - 1];
@@ -178,33 +178,55 @@ const CurrentGame = () => {
                                     );
                                 })}
 
-                                {gameIndex < game.games.length - 1 &&
-                                    (() => {
-                                        let gamesWonUsUpToNow = 0;
-                                        let gamesWonThemUpToNow = 0;
-
-                                        for (let i = 0; i <= gameIndex; i++) {
-                                            if (game.games[i].totalUs >= 151)
-                                                gamesWonUsUpToNow++;
-                                            if (game.games[i].totalThem >= 151)
-                                                gamesWonThemUpToNow++;
-                                        }
-
-                                        return (
-                                            <>
-                                                <hr className="border-t-2 border-amber-700" />
-                                                <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
-                                                    <h1 className="text-center">
-                                                        {gamesWonUsUpToNow}
-                                                    </h1>
-                                                    <h1 className="text-center">
-                                                        {gamesWonThemUpToNow}
-                                                    </h1>
+                                {gameIndex < game.games.length - 1 && (
+                                    <>
+                                        <div className="grid grid-cols-1 items-center text-3xl py-1.5 font-bold">
+                                            <div className="grid grid-cols-2 text-center justify-center border-r border-black/10">
+                                                <div>
+                                                    <span>{g.totalUs}</span>
                                                 </div>
-                                                <hr className="border-t-2 border-amber-700" />
-                                            </>
-                                        );
-                                    })()}
+                                                <div className="">
+                                                    <span>{g.totalThem}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <>
+                                            <hr className="border-t-2 border-amber-700" />
+                                            <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
+                                                <h1 className="text-center">
+                                                    {
+                                                        game.games
+                                                            .slice(
+                                                                0,
+                                                                gameIndex + 1
+                                                            )
+                                                            .filter(
+                                                                (gg) =>
+                                                                    gg.totalUs >=
+                                                                    151
+                                                            ).length
+                                                    }
+                                                </h1>
+                                                <h1 className="text-center">
+                                                    {
+                                                        game.games
+                                                            .slice(
+                                                                0,
+                                                                gameIndex + 1
+                                                            )
+                                                            .filter(
+                                                                (gg) =>
+                                                                    gg.totalThem >=
+                                                                    151
+                                                            ).length
+                                                    }
+                                                </h1>
+                                            </div>
+                                            <hr className="border-t-2 border-amber-700" />
+                                        </>
+                                    </>
+                                )}
                             </div>
                         );
                     })}
