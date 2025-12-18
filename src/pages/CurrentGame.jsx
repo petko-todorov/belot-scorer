@@ -25,8 +25,7 @@ const CurrentGame = () => {
                     totalThem: 0,
                 },
             ],
-            gamesWonUs: 0,
-            gamesWonThem: 0,
+            gamesWon: { us: 0, them: 0 },
         };
 
         saveGame(newGame);
@@ -58,6 +57,7 @@ const CurrentGame = () => {
         });
     };
 
+
     const handleAdd = () => {
         const us = Number(inputUs) || 0;
         const them = Number(inputThem) || 0;
@@ -72,15 +72,16 @@ const CurrentGame = () => {
             currentGame.totalUs += us;
             currentGame.totalThem += them;
 
-            let gamesWonUs = prev.gamesWonUs;
-            let gamesWonThem = prev.gamesWonThem;
+            let gamesWon = { ...prev.gamesWon };
 
             const gameEnded =
                 currentGame.totalUs >= 151 || currentGame.totalThem >= 151;
 
+            games[currentIndex] = currentGame;
+
             if (gameEnded) {
-                if (currentGame.totalUs >= 151) gamesWonUs++;
-                if (currentGame.totalThem >= 151) gamesWonThem++;
+                if (currentGame.totalUs >= 151) gamesWon.us += 1;
+                if (currentGame.totalThem >= 151) gamesWon.them += 1;
 
                 games.push({
                     gameNumber: currentGame.gameNumber + 1,
@@ -90,15 +91,7 @@ const CurrentGame = () => {
                 });
             }
 
-            games[currentIndex] = currentGame;
-
-            const updatedGame = {
-                ...prev,
-                games,
-                gamesWonUs,
-                gamesWonThem,
-            };
-
+            const updatedGame = { ...prev, games, gamesWon };
             saveGame(updatedGame);
             return updatedGame;
         });
@@ -108,29 +101,10 @@ const CurrentGame = () => {
     };
 
     const currentGame = game.games[game.games.length - 1];
-    const roundsWithTotals = currentGame.rounds.reduce(
-        (acc, round) => {
-            const prevUs = acc.runningUs;
-            const prevThem = acc.runningThem;
-
-            acc.list.push({
-                prevUs,
-                prevThem,
-                us: round.us,
-                them: round.them,
-            });
-
-            acc.runningUs += round.us;
-            acc.runningThem += round.them;
-
-            return acc;
-        },
-        { runningUs: 0, runningThem: 0, list: [] }
-    ).list;
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'auto' });
-    }, [roundsWithTotals]);
+    }, [game]);
 
     return (
         <main className="font-custom">
@@ -147,38 +121,93 @@ const CurrentGame = () => {
                         <h1 className="text-center">{game.teams.us}</h1>
                         <h1 className="text-center">{game.teams.them}</h1>
                     </div>
-                    <hr className="border-t-2 border-amber-700" />
-
-                    <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
-                        <h1 className="text-center">{game.gamesWonUs}</h1>
-                        <h1 className="text-center">{game.gamesWonThem}</h1>
-                    </div>
-                    <hr className="border-t-2 border-amber-700" />
                 </div>
 
                 <div className="flex-1 overflow-y-auto flex flex-col font-mon">
-                    {roundsWithTotals.map((round, index) => (
-                        <div
-                            key={index}
-                            className="grid grid-cols-2 items-center text-3xl py-1.5 border-b border-black/5"
-                        >
-                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center border-r border-black/10">
-                                <span className="text-right">
-                                    {round.prevUs}
-                                </span>
-                                <span className="text-center">-</span>
-                                <span className="text-left">{round.us}</span>
-                            </div>
-
-                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center">
-                                <span className="text-right">
-                                    {round.prevThem}
-                                </span>
-                                <span className="text-center">-</span>
-                                <span className="text-left">{round.them}</span>
-                            </div>
+                    <div>
+                        <hr className="border-t-2 border-amber-700" />
+                        <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
+                            <h1 className="text-center">0</h1>
+                            <h1 className="text-center">0</h1>
                         </div>
-                    ))}
+                        <hr className="border-t-2 border-amber-700" />
+                    </div>
+
+                    {game.games.map((g, gameIndex) => {
+                        let runningUs = 0;
+                        let runningThem = 0;
+
+                        return (
+                            <div key={g.gameNumber}>
+                                {g.rounds.map((round, roundIndex) => {
+                                    const prevUs = runningUs;
+                                    const prevThem = runningThem;
+
+                                    runningUs += round.us;
+                                    runningThem += round.them;
+
+                                    return (
+                                        <div
+                                            key={roundIndex}
+                                            className="grid grid-cols-2 items-center text-3xl py-1.5 border-b border-black/5"
+                                        >
+                                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center border-r border-black/10">
+                                                <span className="text-right">
+                                                    {prevUs}
+                                                </span>
+                                                <span className="text-center">
+                                                    -
+                                                </span>
+                                                <span className="text-left">
+                                                    {round.us}
+                                                </span>
+                                            </div>
+
+                                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center">
+                                                <span className="text-right">
+                                                    {prevThem}
+                                                </span>
+                                                <span className="text-center">
+                                                    -
+                                                </span>
+                                                <span className="text-left">
+                                                    {round.them}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+
+                                {gameIndex < game.games.length - 1 &&
+                                    (() => {
+                                        let gamesWonUsUpToNow = 0;
+                                        let gamesWonThemUpToNow = 0;
+
+                                        for (let i = 0; i <= gameIndex; i++) {
+                                            if (game.games[i].totalUs >= 151)
+                                                gamesWonUsUpToNow++;
+                                            if (game.games[i].totalThem >= 151)
+                                                gamesWonThemUpToNow++;
+                                        }
+
+                                        return (
+                                            <>
+                                                <hr className="border-t-2 border-amber-700" />
+                                                <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
+                                                    <h1 className="text-center">
+                                                        {gamesWonUsUpToNow}
+                                                    </h1>
+                                                    <h1 className="text-center">
+                                                        {gamesWonThemUpToNow}
+                                                    </h1>
+                                                </div>
+                                                <hr className="border-t-2 border-amber-700" />
+                                            </>
+                                        );
+                                    })()}
+                            </div>
+                        );
+                    })}
 
                     <div ref={bottomRef} />
 
@@ -194,6 +223,8 @@ const CurrentGame = () => {
                                 onChange={(e) => setInputUs(e.target.value)}
                                 onFocus={() => setActiveSide('us')}
                                 className="w-[4ch] bg-transparent text-left outline-none"
+                                placeholder={activeSide === 'us' ? '' : '0'}
+                                inputMode="none"
                             />
                         </div>
 
@@ -207,7 +238,9 @@ const CurrentGame = () => {
                                 value={inputThem}
                                 onChange={(e) => setInputThem(e.target.value)}
                                 onFocus={() => setActiveSide('them')}
+                                placeholder={activeSide === 'them' ? '' : '0'}
                                 className="w-[4ch] bg-transparent text-left outline-none"
+                                inputMode="none"
                             />
                         </div>
                     </div>
