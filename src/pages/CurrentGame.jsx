@@ -111,6 +111,9 @@ const CurrentGame = () => {
         bottomRef.current?.scrollIntoView({ behavior: 'auto' });
     }, [game]);
 
+    const stickyUs = game.games.filter((g) => g.totalUs >= 151).length;
+    const stickyThem = game.games.filter((g) => g.totalThem >= 151).length;
+
     return (
         <main className="font-custom">
             <div className="h-screen flex flex-col">
@@ -122,13 +125,13 @@ const CurrentGame = () => {
                     </div>
                     <hr />
 
-                    <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
+                    <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold mr-2">
                         <h1 className="text-center">{game.teams.us}</h1>
                         <h1 className="text-center">{game.teams.them}</h1>
                     </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto flex flex-col">
+                <div className="overflow-y-auto">
                     <div>
                         <hr className="border-t-2 border-amber-700" />
                         <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
