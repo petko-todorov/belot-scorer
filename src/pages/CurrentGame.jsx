@@ -196,40 +196,32 @@ const CurrentGame = () => {
                                             </div>
                                         </div>
 
-                                        <>
-                                            <hr className="border-t-2 border-amber-700" />
-                                            <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
-                                                <h1 className="text-center">
-                                                    {
-                                                        game.games
-                                                            .slice(
-                                                                0,
-                                                                gameIndex + 1
-                                                            )
-                                                            .filter(
-                                                                (gg) =>
-                                                                    gg.totalUs >=
-                                                                    151
-                                                            ).length
-                                                    }
-                                                </h1>
-                                                <h1 className="text-center">
-                                                    {
-                                                        game.games
-                                                            .slice(
-                                                                0,
-                                                                gameIndex + 1
-                                                            )
-                                                            .filter(
-                                                                (gg) =>
-                                                                    gg.totalThem >=
-                                                                    151
-                                                            ).length
-                                                    }
-                                                </h1>
-                                            </div>
-                                            <hr className="border-t-2 border-amber-700" />
-                                        </>
+                                        <hr className="border-t-2 border-amber-700" />
+                                        <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
+                                            <h1 className="text-center">
+                                                {
+                                                    game.games
+                                                        .slice(0, gameIndex + 1)
+                                                        .filter(
+                                                            (gg) =>
+                                                                gg.totalUs >=
+                                                                151
+                                                        ).length
+                                                }
+                                            </h1>
+                                            <h1 className="text-center">
+                                                {
+                                                    game.games
+                                                        .slice(0, gameIndex + 1)
+                                                        .filter(
+                                                            (gg) =>
+                                                                gg.totalThem >=
+                                                                151
+                                                        ).length
+                                                }
+                                            </h1>
+                                        </div>
+                                        <hr className="border-t-2 border-amber-700" />
                                     </>
                                 )}
                             </div>
