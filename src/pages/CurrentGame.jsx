@@ -78,9 +78,9 @@ const CurrentGame = () => {
 
             games[currentIndex] = currentGame;
 
-            if (gameEnded) {
+            if (gameEnded && currentGame.totalUs !== currentGame.totalThem) {
                 if (currentGame.totalUs >= 151) gamesWon.us += 1;
-                if (currentGame.totalThem >= 151) gamesWon.them += 1;
+                else if (currentGame.totalThem >= 151) gamesWon.them += 1;
 
                 games.push({
                     gameNumber: currentGame.gameNumber + 1,
