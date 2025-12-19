@@ -131,7 +131,7 @@ const CurrentGame = () => {
                     </div>
                 </div>
 
-                <div className="overflow-y-auto">
+                <div className="overflow-y-auto flex-1 flex flex-col">
                     <div>
                         <hr className="border-t-2 border-amber-700" />
                         <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
