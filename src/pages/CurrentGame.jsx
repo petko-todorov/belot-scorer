@@ -90,7 +90,12 @@ const CurrentGame = () => {
                 });
             }
 
-            const updatedGame = { ...prev, games, gamesWon };
+            const updatedGame = {
+                ...prev,
+                games,
+                gamesWon,
+                updatedAt: Date.now(),
+            };
             saveGame(updatedGame);
             return updatedGame;
         });

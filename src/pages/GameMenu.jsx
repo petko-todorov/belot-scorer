@@ -1,15 +1,24 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { getGames } from '../utils/storage';
 
 const GameMenu = () => {
     const navigate = useNavigate();
+    const location = useLocation(); // добавено
+
     const [games, setGames] = useState([]);
 
-    useEffect(() => {
+    const loadGames = () => {
         const storedGames = getGames();
-        setGames(storedGames);
-    }, []);
+        const sorted = [...storedGames].sort(
+            (a, b) => (b.updatedAt || b.id) - (a.updatedAt || a.id)
+        );
+        setGames(sorted);
+    };
+
+    useEffect(() => {
+        loadGames();
+    }, [location]);
 
     const newGame = () => {
         const id = `${new Date().toLocaleDateString('bg-BG')}-${Date.now()}`;
