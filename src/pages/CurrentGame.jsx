@@ -112,7 +112,7 @@ const CurrentGame = () => {
                 <div className="shrink-0">
                     <div className="flex justify-between items-center px-4 pt-5 pb-1.5 text-xl">
                         <Link to="/menu">‹Назад</Link>
-                        <h1>Игра</h1>
+                        <h1 className="mr-18">Игра</h1>
                         <h1></h1>
                     </div>
                     <hr />
@@ -182,7 +182,7 @@ const CurrentGame = () => {
                                     <>
                                         <div className="grid grid-cols-1 items-center text-3xl py-1.5 font-bold">
                                             <div className="grid grid-cols-2 text-center justify-center border-r border-black/10">
-                                                <div>
+                                                <div className="border-r border-black/10">
                                                     <span>{g.totalUs}</span>
                                                 </div>
                                                 <div className="">
