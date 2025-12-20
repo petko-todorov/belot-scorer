@@ -111,9 +111,6 @@ const CurrentGame = () => {
         bottomRef.current?.scrollIntoView({ behavior: 'auto' });
     }, [game]);
 
-    const stickyUs = game.games.filter((g) => g.totalUs >= 151).length;
-    const stickyThem = game.games.filter((g) => g.totalThem >= 151).length;
-
     return (
         <main className="font-custom">
             <div className="h-screen flex flex-col">
