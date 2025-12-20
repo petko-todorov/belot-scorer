@@ -6,8 +6,8 @@ import NumericKeypad from '../components/NumericKeypad';
 const CurrentGame = () => {
     const { id } = useParams();
     const bottomRef = useRef(null);
-
-    const [activeSide, setActiveSide] = useState('us');
+    const usRef = useRef(null);
+    const themRef = useRef(null);
 
     const [game, setGame] = useState(() => {
         const existing = getGame(id);
@@ -35,31 +35,53 @@ const CurrentGame = () => {
     const [inputUs, setInputUs] = useState('');
     const [inputThem, setInputThem] = useState('');
 
-    const handleNumberPress = (value) => {
-        const setter = activeSide === 'us' ? setInputUs : setInputThem;
+    // const handleNumberPress = (value) => {
+    //     const setter = activeSide === 'us' ? setInputUs : setInputThem;
 
-        setter((prev) => {
-            if (value === 'delete') {
-                return prev.slice(0, -1);
-            }
+    //     setter((prev) => {
+    //         if (value === 'delete') {
+    //             return prev.slice(0, -1);
+    //         }
 
-            if (value === 'sign') {
-                if (!prev) return prev;
-                return prev.startsWith('-') ? prev.slice(1) : '-' + prev;
-            }
+    //         if (value === 'sign') {
+    //             if (!prev) return prev;
+    //             return prev.startsWith('-') ? prev.slice(1) : '-' + prev;
+    //         }
 
-            const next = Number((prev + value).replace(/\D/g, ''));
+    //         const next = Number((prev + value).replace(/\D/g, ''));
 
-            if (Number.isNaN(next)) return '';
-            if (next > 151) return '151';
+    //         if (Number.isNaN(next)) return '';
+    //         if (next > 151) return '151';
 
-            return String(next);
-        });
+    //         return String(next);
+    //     });
+    // };
+
+    const clampScore = (value) => {
+        if (value === '' || value == null) return '';
+
+        let cleaned = String(value);
+
+        const hasPlus = cleaned.includes('+');
+        const hasMinus = cleaned.includes('-');
+
+        const digitsOnly = cleaned.replace(/\D/g, '');
+
+        if (!digitsOnly) return hasMinus ? '-' : '';
+
+        const num = Number(digitsOnly);
+        const clamped = num > 151 ? '151' : digitsOnly;
+
+        if (hasPlus) return clamped;
+
+        if (hasMinus) return '-' + clamped;
+
+        return clamped;
     };
 
     const handleAdd = () => {
-        const us = Number(inputUs) || 0;
-        const them = Number(inputThem) || 0;
+        const us = Number(clampScore(inputUs)) || 0;
+        const them = Number(clampScore(inputThem)) || 0;
         if (!us && !them) return;
 
         setGame((prev) => {
@@ -102,7 +124,9 @@ const CurrentGame = () => {
 
         setInputUs('');
         setInputThem('');
-        setActiveSide('us');
+
+        themRef.current?.blur();
+        usRef.current?.blur();
     };
 
     const currentGame = game.games[game.games.length - 1];
@@ -244,13 +268,20 @@ const CurrentGame = () => {
                             </span>
                             <span className="text-center">-</span>
                             <input
-                                type="text"
+                                ref={usRef}
+                                type="tel"
                                 value={inputUs}
-                                onChange={(e) => setInputUs(e.target.value)}
-                                onFocus={() => setActiveSide('us')}
+                                inputMode="numeric"
                                 className="w-[4ch] bg-transparent text-left outline-none"
-                                placeholder={activeSide === 'us' ? '' : '0'}
-                                inputMode="none"
+                                placeholder="0"
+                                onChange={(e) =>
+                                    setInputUs(clampScore(e.target.value))
+                                }
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleAdd();
+                                    }
+                                }}
                             />
                         </div>
 
@@ -260,22 +291,22 @@ const CurrentGame = () => {
                             </span>
                             <span className="text-center">-</span>
                             <input
-                                type="text"
+                                ref={themRef}
+                                type="tel"
                                 value={inputThem}
-                                onChange={(e) => setInputThem(e.target.value)}
-                                onFocus={() => setActiveSide('them')}
-                                placeholder={activeSide === 'them' ? '' : '0'}
+                                inputMode="numeric"
                                 className="w-[4ch] bg-transparent text-left outline-none"
-                                inputMode="none"
+                                placeholder="0"
+                                onChange={(e) =>
+                                    setInputThem(clampScore(e.target.value))
+                                }
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleAdd();
+                                    }
+                                }}
                             />
                         </div>
-                    </div>
-
-                    <div className="shrink-0 mt-auto">
-                        <NumericKeypad
-                            onNumberPress={handleNumberPress}
-                            onAdd={handleAdd}
-                        />
                     </div>
                 </div>
             </div>
