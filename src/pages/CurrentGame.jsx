@@ -122,20 +122,20 @@ const CurrentGame = () => {
                     </div>
                     <hr />
 
-                    <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold mr-2">
+                    <div className="grid grid-cols-2 items-center text-4xl py-1 font-semibold mr-2">
                         <h1 className="text-center">{game.teams.us}</h1>
                         <h1 className="text-center">{game.teams.them}</h1>
                     </div>
                 </div>
 
                 <div className="overflow-y-auto flex-1 flex flex-col">
-                    <div>
-                        <hr className="border-t-2 border-amber-700" />
-                        <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
-                            <h1 className="text-center">0</h1>
-                            <h1 className="text-center">0</h1>
+                    <div className="sticky top-0 z-20 bg-white">
+                        <div className="grid grid-cols-2 items-center text-4xl py-1 font-semibold">
+                            <h1 className="text-center">{game.gamesWon.us}</h1>
+                            <h1 className="text-center">
+                                {game.gamesWon.them}
+                            </h1>
                         </div>
-                        <hr className="border-t-2 border-amber-700" />
                     </div>
 
                     {game.games.map((g, gameIndex) => {
@@ -154,9 +154,9 @@ const CurrentGame = () => {
                                     return (
                                         <div
                                             key={roundIndex}
-                                            className="grid grid-cols-2 items-center text-3xl py-1.5 border-b border-black/5"
+                                            className="grid grid-cols-2 items-center text-3xl py-1.5 border-y border-stone-400"
                                         >
-                                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center border-r border-black/10">
+                                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center">
                                                 <span className="text-right">
                                                     {prevUs}
                                                 </span>
@@ -186,8 +186,8 @@ const CurrentGame = () => {
                                 {gameIndex < game.games.length - 1 && (
                                     <>
                                         <div className="grid grid-cols-1 items-center text-3xl py-1.5 font-bold">
-                                            <div className="grid grid-cols-2 text-center justify-center border-r border-black/10">
-                                                <div className="border-r border-black/10">
+                                            <div className="grid grid-cols-2 text-center justify-center">
+                                                <div>
                                                     <span>{g.totalUs}</span>
                                                 </div>
                                                 <div className="">
@@ -197,8 +197,8 @@ const CurrentGame = () => {
                                         </div>
 
                                         <div>
-                                            <hr className="border-t-2 border-amber-700" />
-                                            <div className="grid grid-cols-2 items-center text-5xl py-1 font-semibold">
+                                            <hr className="border-t-4 border-stone-400" />
+                                            <div className="grid grid-cols-2 items-center text-4xl py-1 font-semibold">
                                                 <h1 className="text-center">
                                                     {
                                                         game.games
@@ -228,7 +228,6 @@ const CurrentGame = () => {
                                                     }
                                                 </h1>
                                             </div>
-                                            <hr className="border-t-2 border-amber-700" />
                                         </div>
                                     </>
                                 )}
@@ -238,8 +237,8 @@ const CurrentGame = () => {
 
                     <div ref={bottomRef} />
 
-                    <div className="grid grid-cols-2 items-center text-3xl py-1.5 font-bold">
-                        <div className="grid grid-cols-[4ch_2ch_4ch] justify-center border-r border-black/10">
+                    <div className="grid grid-cols-2 items-center text-3xl py-1.5">
+                        <div className="grid grid-cols-[4ch_2ch_4ch] justify-center">
                             <span className="text-right">
                                 {currentGame.totalUs}
                             </span>
