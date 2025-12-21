@@ -4,15 +4,17 @@ import { getGames } from '../utils/storage';
 
 const Menu = () => {
     const navigate = useNavigate();
-    const location = useLocation(); // добавено
+    const location = useLocation();
 
     const [games, setGames] = useState([]);
 
     const loadGames = () => {
         const storedGames = getGames();
-        const sorted = [...storedGames].sort(
-            (a, b) => (b.updatedAt || b.id) - (a.updatedAt || a.id)
-        );
+        const sorted = [...storedGames].sort((a, b) => {
+            const aTime = a.updatedAt || 0;
+            const bTime = b.updatedAt || 0;
+            return bTime - aTime;
+        });
         setGames(sorted);
     };
 
@@ -53,13 +55,13 @@ const Menu = () => {
                                 <div className="flex justify-between items-center">
                                     <h3 className="text-xl">Ние</h3>
                                     <span className="font-bold text-3xl">
-                                        {game.gamesWonUs}
+                                        {game.gamesWon['us']}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <h3 className="text-xl">Вие</h3>
                                     <span className="font-bold text-3xl">
-                                        {game.gamesWonThem}
+                                        {game.gamesWon['them']}
                                     </span>
                                 </div>
                                 <hr className="max-w-screen -mx-4 border-t-2 border-gray-300" />
