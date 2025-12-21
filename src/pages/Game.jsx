@@ -108,6 +108,7 @@ const Game = () => {
                 ...prev,
                 games,
                 updatedAt: Date.now(),
+                date: new Date().toLocaleDateString('bg-BG'),
             };
             saveGame(updatedGame);
             return updatedGame;
@@ -197,7 +198,7 @@ const Game = () => {
 
                         return (
                             <section key={g.gameNumber} className="relative">
-                                <div className="sticky top-0 z-10 bg-white border-b-2 border-stone-400">
+                                <div className="sticky top-0 z-10 border-y-2 border-stone-400 bg-[#D4C6B6]">
                                     <div className="grid grid-cols-2 items-center text-4xl py-1 font-semibold">
                                         <h1 className="text-center">
                                             {winsUs}
