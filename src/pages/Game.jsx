@@ -233,7 +233,7 @@ const Game = () => {
 
                                 {gameIndex < game.games.length - 1 && (
                                     <>
-                                        <div className="grid grid-cols-1 items-center text-3xl py-1.5 font-bold">
+                                        <div className="grid grid-cols-1 items-center text-3xl py-1.5">
                                             <div className="grid grid-cols-2 text-center justify-center">
                                                 <div>
                                                     <span>{g.totalUs}</span>
@@ -245,8 +245,7 @@ const Game = () => {
                                         </div>
 
                                         <div>
-                                            <hr className="border-t-4 border-stone-400" />
-                                            <div className="grid grid-cols-2 items-center text-4xl py-1 font-semibold">
+                                            <div className="grid grid-cols-2 items-center text-4xl py-1 font-semibold border-y-4 border-stone-400">
                                                 <h1 className="text-center">
                                                     {
                                                         game.games
