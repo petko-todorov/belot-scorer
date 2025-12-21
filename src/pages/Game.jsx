@@ -25,6 +25,7 @@ const Game = () => {
                     rounds: [],
                     totalUs: 0,
                     totalThem: 0,
+                    winner: null,
                 },
             ],
             gamesWon: { us: 0, them: 0 },
@@ -125,8 +126,13 @@ const Game = () => {
             const lastGame = games[games.length - 1];
             let gamesWon = { ...prev.gamesWon };
 
-            if (lastGame.totalUs >= 151) gamesWon.us += 1;
-            else if (lastGame.totalThem >= 151) gamesWon.them += 1;
+            if (lastGame.totalUs >= 151) {
+                gamesWon.us += 1;
+                lastGame.winner = 'us';
+            } else if (lastGame.totalThem >= 151) {
+                gamesWon.them += 1;
+                lastGame.winner = 'them';
+            }
 
             games.push({
                 gameNumber: lastGame.gameNumber + 1,
@@ -177,21 +183,31 @@ const Game = () => {
                 </div>
 
                 <div className="overflow-y-auto flex-1 flex flex-col">
-                    <div className="sticky top-0 z-20 bg-white">
-                        <div className="grid grid-cols-2 items-center text-4xl py-1 font-semibold">
-                            <h1 className="text-center">{game.gamesWon.us}</h1>
-                            <h1 className="text-center">
-                                {game.gamesWon.them}
-                            </h1>
-                        </div>
-                    </div>
+                    {game.games.map((g, index) => {
+                        const winsUs = game.games
+                            .slice(0, index)
+                            .filter((gg) => gg.winner === 'us').length;
 
-                    {game.games.map((g, gameIndex) => {
+                        const winsThem = game.games
+                            .slice(0, index)
+                            .filter((gg) => gg.winner === 'them').length;
+
                         let runningUs = 0;
                         let runningThem = 0;
 
                         return (
-                            <div key={g.gameNumber}>
+                            <section key={g.gameNumber} className="relative">
+                                <div className="sticky top-0 z-10 bg-white border-b-2 border-stone-400">
+                                    <div className="grid grid-cols-2 items-center text-4xl py-1 font-semibold">
+                                        <h1 className="text-center">
+                                            {winsUs}
+                                        </h1>
+                                        <h1 className="text-center">
+                                            {winsThem}
+                                        </h1>
+                                    </div>
+                                </div>
+
                                 {g.rounds.map((round, roundIndex) => {
                                     const prevUs = runningUs;
                                     const prevThem = runningThem;
@@ -230,55 +246,7 @@ const Game = () => {
                                         </div>
                                     );
                                 })}
-
-                                {gameIndex < game.games.length - 1 && (
-                                    <>
-                                        <div className="grid grid-cols-1 items-center text-3xl py-1.5">
-                                            <div className="grid grid-cols-2 text-center justify-center">
-                                                <div>
-                                                    <span>{g.totalUs}</span>
-                                                </div>
-                                                <div className="">
-                                                    <span>{g.totalThem}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <div className="grid grid-cols-2 items-center text-4xl py-1 font-semibold border-y-4 border-stone-400">
-                                                <h1 className="text-center">
-                                                    {
-                                                        game.games
-                                                            .slice(
-                                                                0,
-                                                                gameIndex + 1
-                                                            )
-                                                            .filter(
-                                                                (gg) =>
-                                                                    gg.totalUs >=
-                                                                    151
-                                                            ).length
-                                                    }
-                                                </h1>
-                                                <h1 className="text-center">
-                                                    {
-                                                        game.games
-                                                            .slice(
-                                                                0,
-                                                                gameIndex + 1
-                                                            )
-                                                            .filter(
-                                                                (gg) =>
-                                                                    gg.totalThem >=
-                                                                    151
-                                                            ).length
-                                                    }
-                                                </h1>
-                                            </div>
-                                        </div>
-                                    </>
-                                )}
-                            </div>
+                            </section>
                         );
                     })}
 
@@ -301,9 +269,7 @@ const Game = () => {
                                     setInputUs(clampScore(e.target.value))
                                 }
                                 onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        handleAdd();
-                                    }
+                                    if (e.key === 'Enter') handleAdd();
                                 }}
                             />
                         </div>
@@ -324,9 +290,7 @@ const Game = () => {
                                     setInputThem(clampScore(e.target.value))
                                 }
                                 onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        handleAdd();
-                                    }
+                                    if (e.key === 'Enter') handleAdd();
                                 }}
                             />
                         </div>
