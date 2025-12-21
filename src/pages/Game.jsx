@@ -221,7 +221,7 @@ const Game = () => {
                                             key={roundIndex}
                                             className="grid grid-cols-2 items-center text-3xl py-1.5 border-y border-stone-400"
                                         >
-                                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center">
+                                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center max-sm:grid-cols-[1fr_0.5fr_1fr]">
                                                 <span className="text-right">
                                                     {prevUs}
                                                 </span>
@@ -233,7 +233,7 @@ const Game = () => {
                                                 </span>
                                             </div>
 
-                                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center">
+                                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center max-sm:grid-cols-[1fr_0.5fr_1fr]">
                                                 <span className="text-right">
                                                     {prevThem}
                                                 </span>
@@ -264,7 +264,7 @@ const Game = () => {
                                 type="tel"
                                 value={inputUs}
                                 inputMode="numeric"
-                                className="w-[4ch] bg-transparent text-left outline-none"
+                                className="w-[3ch] bg-transparent text-left outline-none"
                                 placeholder="0"
                                 onChange={(e) =>
                                     setInputUs(clampScore(e.target.value))
@@ -285,7 +285,7 @@ const Game = () => {
                                 type="tel"
                                 value={inputThem}
                                 inputMode="numeric"
-                                className="w-[4ch] bg-transparent text-left outline-none"
+                                className="w-[3ch] bg-transparent text-left outline-none"
                                 placeholder="0"
                                 onChange={(e) =>
                                     setInputThem(clampScore(e.target.value))
