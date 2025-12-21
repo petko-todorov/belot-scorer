@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { getGames } from '../utils/storage';
 
-const GameMenu = () => {
+const Menu = () => {
     const navigate = useNavigate();
     const location = useLocation(); // добавено
 
@@ -72,4 +72,4 @@ const GameMenu = () => {
     );
 };
 
-export default GameMenu;
+export default Menu;

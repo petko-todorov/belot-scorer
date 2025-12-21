@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router';
 import NumericKeypad from '../components/NumericKeypad';
 import ModalWin from '../components/ModalWin';
 
-const CurrentGame = () => {
+const Game = () => {
     const { id } = useParams();
     const bottomRef = useRef(null);
     const usRef = useRef(null);
@@ -344,4 +344,4 @@ const CurrentGame = () => {
     );
 };
 
-export default CurrentGame;
+export default Game;
