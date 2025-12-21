@@ -2,12 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { getGame, saveGame } from '../utils/storage';
 import { Link, useParams } from 'react-router';
 import NumericKeypad from '../components/NumericKeypad';
+import ModalWin from '../components/ModalWin';
 
 const CurrentGame = () => {
     const { id } = useParams();
     const bottomRef = useRef(null);
     const usRef = useRef(null);
     const themRef = useRef(null);
+    const [openModal, setOpenModal] = useState(false);
 
     const [game, setGame] = useState(() => {
         const existing = getGame(id);
@@ -93,29 +95,17 @@ const CurrentGame = () => {
             currentGame.totalUs += us;
             currentGame.totalThem += them;
 
-            let gamesWon = { ...prev.gamesWon };
-
             const gameEnded =
                 currentGame.totalUs >= 151 || currentGame.totalThem >= 151;
 
             games[currentIndex] = currentGame;
 
-            if (gameEnded && currentGame.totalUs !== currentGame.totalThem) {
-                if (currentGame.totalUs >= 151) gamesWon.us += 1;
-                else if (currentGame.totalThem >= 151) gamesWon.them += 1;
-
-                games.push({
-                    gameNumber: currentGame.gameNumber + 1,
-                    rounds: [],
-                    totalUs: 0,
-                    totalThem: 0,
-                });
-            }
+            if (gameEnded && currentGame.totalUs !== currentGame.totalThem)
+                setOpenModal(true);
 
             const updatedGame = {
                 ...prev,
                 games,
-                gamesWon,
                 updatedAt: Date.now(),
             };
             saveGame(updatedGame);
@@ -127,6 +117,40 @@ const CurrentGame = () => {
 
         themRef.current?.blur();
         usRef.current?.blur();
+    };
+
+    const confirmEndGame = () => {
+        setGame((prev) => {
+            const games = [...prev.games];
+            const lastGame = games[games.length - 1];
+            let gamesWon = { ...prev.gamesWon };
+
+            if (lastGame.totalUs >= 151) gamesWon.us += 1;
+            else if (lastGame.totalThem >= 151) gamesWon.them += 1;
+
+            games.push({
+                gameNumber: lastGame.gameNumber + 1,
+                rounds: [],
+                totalUs: 0,
+                totalThem: 0,
+            });
+
+            const updatedGame = {
+                ...prev,
+                games,
+                gamesWon,
+                updatedAt: Date.now(),
+            };
+
+            saveGame(updatedGame);
+            return updatedGame;
+        });
+
+        setOpenModal(false);
+    };
+
+    const cancelEndGame = () => {
+        setOpenModal(false);
     };
 
     const currentGame = game.games[game.games.length - 1];
@@ -310,6 +334,12 @@ const CurrentGame = () => {
                     </div>
                 </div>
             </div>
+
+            <ModalWin
+                openModal={openModal}
+                confirmEndGame={confirmEndGame}
+                cancelEndGame={cancelEndGame}
+            />
         </main>
     );
 };
