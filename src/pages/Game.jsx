@@ -221,7 +221,7 @@ const Game = () => {
                                             key={roundIndex}
                                             className="grid grid-cols-2 items-center text-3xl py-1.5 border-y border-stone-400"
                                         >
-                                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center max-sm:grid-cols-[1fr_0.5fr_1fr]">
+                                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center max-sm:grid-cols-[0.8fr_0.5fr_0.8fr]">
                                                 <span className="text-right">
                                                     {prevUs}
                                                 </span>
@@ -233,7 +233,7 @@ const Game = () => {
                                                 </span>
                                             </div>
 
-                                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center max-sm:grid-cols-[1fr_0.5fr_1fr]">
+                                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center max-sm:grid-cols-[0.8fr_0.5fr_0.8fr]">
                                                 <span className="text-right">
                                                     {prevThem}
                                                 </span>
