@@ -1,308 +1,71 @@
-import { useEffect, useRef, useState } from 'react';
-import { getGame, saveGame } from '../utils/storage';
 import { Link, useParams } from 'react-router';
-import NumericKeypad from '../components/NumericKeypad';
+import { useGame } from '../hooks/useGame';
+import GameHistory from '../components/GameHistory';
+import ScoreInput from '../components/ScoreInput';
 import ModalWin from '../components/ModalWin';
 
 const Game = () => {
     const { id } = useParams();
-    const bottomRef = useRef(null);
-    const usRef = useRef(null);
-    const themRef = useRef(null);
-    const [openModal, setOpenModal] = useState(false);
 
-    const [game, setGame] = useState(() => {
-        const existing = getGame(id);
-        if (existing) return existing;
-
-        const newGame = {
-            id,
-            date: new Date().toLocaleDateString('bg-BG'),
-            teams: { us: 'Ние', them: 'Вие' },
-            games: [
-                {
-                    gameNumber: 1,
-                    rounds: [],
-                    totalUs: 0,
-                    totalThem: 0,
-                    winner: null,
-                },
-            ],
-            gamesWon: { us: 0, them: 0 },
-        };
-
-        saveGame(newGame);
-        return newGame;
-    });
-
-    const [inputUs, setInputUs] = useState('');
-    const [inputThem, setInputThem] = useState('');
-
-    // const handleNumberPress = (value) => {
-    //     const setter = activeSide === 'us' ? setInputUs : setInputThem;
-
-    //     setter((prev) => {
-    //         if (value === 'delete') {
-    //             return prev.slice(0, -1);
-    //         }
-
-    //         if (value === 'sign') {
-    //             if (!prev) return prev;
-    //             return prev.startsWith('-') ? prev.slice(1) : '-' + prev;
-    //         }
-
-    //         const next = Number((prev + value).replace(/\D/g, ''));
-
-    //         if (Number.isNaN(next)) return '';
-    //         if (next > 151) return '151';
-
-    //         return String(next);
-    //     });
-    // };
-
-    const clampScore = (value) => {
-        if (value === '' || value == null) return '';
-
-        let cleaned = String(value);
-
-        const hasPlus = cleaned.includes('+');
-        const hasMinus = cleaned.includes('-');
-
-        const digitsOnly = cleaned.replace(/\D/g, '');
-
-        if (!digitsOnly) return hasMinus ? '-' : '';
-
-        const num = Number(digitsOnly);
-        const clamped = num > 151 ? '151' : digitsOnly;
-
-        if (hasPlus) return clamped;
-
-        if (hasMinus) return '-' + clamped;
-
-        return clamped;
-    };
-
-    const handleAdd = () => {
-        const us = Number(clampScore(inputUs)) || 0;
-        const them = Number(clampScore(inputThem)) || 0;
-        if (!us && !them) return;
-
-        setGame((prev) => {
-            const games = [...prev.games];
-            const currentIndex = games.length - 1;
-            const currentGame = { ...games[currentIndex] };
-
-            currentGame.rounds = [...currentGame.rounds, { us, them }];
-            currentGame.totalUs += us;
-            currentGame.totalThem += them;
-
-            const gameEnded =
-                currentGame.totalUs >= 151 || currentGame.totalThem >= 151;
-
-            games[currentIndex] = currentGame;
-
-            if (gameEnded && currentGame.totalUs !== currentGame.totalThem)
-                setOpenModal(true);
-
-            const updatedGame = {
-                ...prev,
-                games,
-                updatedAt: Date.now(),
-                date: new Date().toLocaleDateString('bg-BG'),
-            };
-            saveGame(updatedGame);
-            return updatedGame;
-        });
-
-        setInputUs('');
-        setInputThem('');
-
-        themRef.current?.blur();
-        usRef.current?.blur();
-    };
-
-    const confirmEndGame = () => {
-        setGame((prev) => {
-            const games = [...prev.games];
-            const lastGame = games[games.length - 1];
-            let gamesWon = { ...prev.gamesWon };
-
-            if (lastGame.totalUs >= 151) {
-                gamesWon.us += 1;
-                lastGame.winner = 'us';
-            } else if (lastGame.totalThem >= 151) {
-                gamesWon.them += 1;
-                lastGame.winner = 'them';
-            }
-
-            games.push({
-                gameNumber: lastGame.gameNumber + 1,
-                rounds: [],
-                totalUs: 0,
-                totalThem: 0,
-            });
-
-            const updatedGame = {
-                ...prev,
-                games,
-                gamesWon,
-                updatedAt: Date.now(),
-            };
-
-            saveGame(updatedGame);
-            return updatedGame;
-        });
-
-        setOpenModal(false);
-    };
-
-    const cancelEndGame = () => {
-        setOpenModal(false);
-    };
-
-    const currentGame = game.games[game.games.length - 1];
-
-    useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: 'auto' });
-    }, [game]);
+    const {
+        game,
+        currentGame,
+        inputUs,
+        inputThem,
+        setInputUs,
+        setInputThem,
+        handleAdd,
+        confirmEndGame,
+        openModal,
+        setOpenModal,
+        bottomRef,
+        usRef,
+        themRef,
+    } = useGame(id);
 
     return (
         <main className="font-custom">
             <div className="h-screen flex flex-col">
-                <div className="shrink-0">
-                    <div className="flex justify-between items-center px-4 pt-5 pb-1.5 text-xl">
+                <header className="shrink-0">
+                    <div className="flex justify-between px-4 pt-5 pb-1.5 text-xl">
                         <Link to="/menu">‹Назад</Link>
-                        <h1 className="mr-18">Игра</h1>
-                        <h1></h1>
+                        <h1>Игра</h1>
+                        <span />
                     </div>
                     <hr />
-
-                    <div className="grid grid-cols-2 items-center text-4xl py-1 font-semibold mr-2">
+                    <div className="grid grid-cols-2 text-4xl py-1 font-semibold">
                         <h1 className="text-center">{game.teams.us}</h1>
                         <h1 className="text-center">{game.teams.them}</h1>
                     </div>
-                </div>
+                </header>
 
-                <div className="overflow-y-auto flex-1 flex flex-col">
-                    {game.games.map((g, index) => {
-                        const winsUs = game.games
-                            .slice(0, index)
-                            .filter((gg) => gg.winner === 'us').length;
-
-                        const winsThem = game.games
-                            .slice(0, index)
-                            .filter((gg) => gg.winner === 'them').length;
-
-                        let runningUs = 0;
-                        let runningThem = 0;
-
-                        return (
-                            <section key={g.gameNumber} className="relative">
-                                <div className="sticky top-0 z-10 border-y-2 border-stone-400 bg-[#D4C6B6]">
-                                    <div className="grid grid-cols-2 items-center text-4xl py-1 font-semibold">
-                                        <h1 className="text-center">
-                                            {winsUs}
-                                        </h1>
-                                        <h1 className="text-center">
-                                            {winsThem}
-                                        </h1>
-                                    </div>
-                                </div>
-
-                                {g.rounds.map((round, roundIndex) => {
-                                    const prevUs = runningUs;
-                                    const prevThem = runningThem;
-
-                                    runningUs += round.us;
-                                    runningThem += round.them;
-
-                                    return (
-                                        <div
-                                            key={roundIndex}
-                                            className="grid grid-cols-2 items-center text-3xl py-1.5 border-y border-stone-400"
-                                        >
-                                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center max-sm:grid-cols-[0.8fr_0.5fr_0.8fr]">
-                                                <span className="text-right">
-                                                    {prevUs}
-                                                </span>
-                                                <span className="text-center">
-                                                    -
-                                                </span>
-                                                <span className="text-left">
-                                                    {round.us}
-                                                </span>
-                                            </div>
-
-                                            <div className="grid grid-cols-[4ch_2ch_4ch] justify-center max-sm:grid-cols-[0.8fr_0.5fr_0.8fr]">
-                                                <span className="text-right">
-                                                    {prevThem}
-                                                </span>
-                                                <span className="text-center">
-                                                    -
-                                                </span>
-                                                <span className="text-left">
-                                                    {round.them}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </section>
-                        );
-                    })}
-
+                <section className="flex-1 overflow-y-auto">
+                    <GameHistory games={game.games} />
                     <div ref={bottomRef} />
 
-                    <div className="grid grid-cols-2 items-center text-3xl py-1.5">
-                        <div className="grid grid-cols-[4ch_2ch_4ch] justify-center">
-                            <span className="text-right">
-                                {currentGame.totalUs}
-                            </span>
-                            <span className="text-center">-</span>
-                            <input
-                                ref={usRef}
-                                type="tel"
-                                value={inputUs}
-                                inputMode="numeric"
-                                className="w-[3ch] bg-transparent text-left outline-none"
-                                placeholder="0"
-                                onChange={(e) =>
-                                    setInputUs(clampScore(e.target.value))
-                                }
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') handleAdd();
-                                }}
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-[4ch_2ch_4ch] justify-center">
-                            <span className="text-right">
-                                {currentGame.totalThem}
-                            </span>
-                            <span className="text-center">-</span>
-                            <input
-                                ref={themRef}
-                                type="tel"
-                                value={inputThem}
-                                inputMode="numeric"
-                                className="w-[3ch] bg-transparent text-left outline-none"
-                                placeholder="0"
-                                onChange={(e) =>
-                                    setInputThem(clampScore(e.target.value))
-                                }
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') handleAdd();
-                                }}
-                            />
-                        </div>
+                    <div className="grid grid-cols-2 text-3xl py-1.5">
+                        <ScoreInput
+                            total={currentGame.totalUs}
+                            value={inputUs}
+                            onChange={setInputUs}
+                            inputRef={usRef}
+                            onEnter={handleAdd}
+                        />
+                        <ScoreInput
+                            total={currentGame.totalThem}
+                            value={inputThem}
+                            onChange={setInputThem}
+                            inputRef={themRef}
+                            onEnter={handleAdd}
+                        />
                     </div>
-                </div>
+                </section>
             </div>
 
             <ModalWin
                 openModal={openModal}
                 confirmEndGame={confirmEndGame}
-                cancelEndGame={cancelEndGame}
+                cancelEndGame={() => setOpenModal(false)}
             />
         </main>
     );
