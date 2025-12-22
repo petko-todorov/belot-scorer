@@ -2,7 +2,7 @@ import { Modal, Box, Typography, Button } from '@mui/material';
 
 const style = {
     position: 'absolute',
-    top: '50%',
+    top: '40%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 300,
@@ -23,7 +23,7 @@ const ModalWin = ({ openModal, confirmEndGame, cancelEndGame }) => {
                 disableEscapeKeyDown
             >
                 <Box sx={style}>
-                    <Typography variant="h6">Свърши ли играта?</Typography>
+                    <Typography variant="h6">Приключи ли играта?</Typography>
 
                     <Box className="flex justify-center gap-3 mt-3">
                         <Button variant="outlined" onClick={cancelEndGame}>
