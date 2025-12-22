@@ -25,3 +25,9 @@ export const getGames = () => {
         return [];
     }
 };
+
+export const deleteGame = (id) => {
+    const games = getGames();
+    const filtered = games.filter((g) => g.id !== id);
+    localStorage.setItem('belot-games', JSON.stringify(filtered));
+};
