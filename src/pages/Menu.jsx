@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { getGames } from '../utils/storage';
+import { deleteGame, getGames } from '../utils/storage';
+import SwipeToDelete from 'react-swipe-to-delete-component';
+import 'react-swipe-to-delete-component/dist/swipe-to-delete.css';
 
 const Menu = () => {
     const navigate = useNavigate();
@@ -31,42 +33,54 @@ const Menu = () => {
         navigate(`/game/${id}`);
     };
 
+    const handleDelete = (id) => {
+        deleteGame(id);
+        setGames((prev) => prev.filter((g) => g.id !== id)); // remove from state
+    };
+
     return (
         <>
             <main className="font-custom">
-                <div className="flex justify-between items-center px-4 pt-5 pb-1.5 text-xl">
+                <header className="flex justify-between items-center px-4 pt-5 pb-1.5 text-xl">
                     <Link to="/">‹Назад</Link>
                     <h1>Игри</h1>
                     <button onClick={newGame}>Нова игра</button>
-                </div>
+                </header>
                 <hr />
                 <ul>
                     {games.map((game) => (
-                        <li
+                        <SwipeToDelete
                             key={game.id}
-                            onClick={() => continueGame(game.id)}
-                            className="select-none"
+                            onDelete={() => handleDelete(game.id)}
                         >
-                            <div className="mx-4">
-                                <div className="flex justify-between items-center text-2xl">
-                                    <h3 className="font-custom">Игра</h3>
-                                    <span>{game.date}</span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <h3 className="text-xl">Ние</h3>
-                                    <span className="font-bold text-3xl">
-                                        {game.gamesWon['us']}
-                                    </span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <h3 className="text-xl">Вие</h3>
-                                    <span className="font-bold text-3xl">
-                                        {game.gamesWon['them']}
-                                    </span>
-                                </div>
-                                <hr className="max-w-screen -mx-4 border-t-2 border-gray-300" />
-                            </div>
-                        </li>
+                            <li
+                                key={game.id}
+                                onClick={() => continueGame(game.id)}
+                                className="select-none bg-[#d4c6b6]"
+                            >
+                                <section className="mx-4">
+                                    <div className="flex justify-between items-center text-2xl">
+                                        <h3 className="font-custom">Игра</h3>
+                                        <span>{game.date}</span>
+                                    </div>
+
+                                    <div className="flex justify-between items-center">
+                                        <h3 className="text-xl">Ние</h3>
+                                        <span className="font-bold text-3xl">
+                                            {game.gamesWon['us']}
+                                        </span>
+                                    </div>
+
+                                    <div className="flex justify-between items-center">
+                                        <h3 className="text-xl">Вие</h3>
+                                        <span className="font-bold text-3xl">
+                                            {game.gamesWon['them']}
+                                        </span>
+                                    </div>
+                                    <hr className="max-w-screen -mx-4 border-t-2 border-stone-400" />
+                                </section>
+                            </li>
+                        </SwipeToDelete>
                     ))}
                 </ul>
             </main>
