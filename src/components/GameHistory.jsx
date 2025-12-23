@@ -27,13 +27,22 @@ const GameHistory = ({ games }) => {
                     runningUs += round.us;
                     runningThem += round.them;
 
+                    const showFinalTotalSum =
+                        g.winner && i === g.rounds.length - 1;
+
                     return (
-                        <div
-                            key={i}
-                            className="grid grid-cols-2 text-3xl py-1.5 border-y border-stone-400"
-                        >
-                            <ScoreLine prev={prevUs} value={round.us} />
-                            <ScoreLine prev={prevThem} value={round.them} />
+                        <div key={i}>
+                            <div className="grid grid-cols-2 text-3xl py-1.5 border-y border-stone-400">
+                                <ScoreLine prev={prevUs} value={round.us} />
+                                <ScoreLine prev={prevThem} value={round.them} />
+                            </div>
+
+                            {showFinalTotalSum && (
+                                <div className="grid grid-cols-2 text-3xl py-1 text-center">
+                                    <span>{runningUs}</span>
+                                    <span>{runningThem}</span>
+                                </div>
+                            )}
                         </div>
                     );
                 })}
