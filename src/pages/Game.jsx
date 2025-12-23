@@ -30,9 +30,11 @@ const Game = () => {
                     <div className="flex justify-between px-4 pt-5 pb-1.5 text-xl">
                         <Link to="/menu">‹Назад</Link>
                         <h1>Игра</h1>
-                        <span />
+                        <span className="mr-15" />
                     </div>
+
                     <hr />
+
                     <div className="grid grid-cols-2 text-4xl py-1 font-semibold">
                         <h1 className="text-center">{game.teams.us}</h1>
                         <h1 className="text-center">{game.teams.them}</h1>
@@ -41,6 +43,7 @@ const Game = () => {
 
                 <section className="flex-1 overflow-y-auto">
                     <GameHistory games={game.games} />
+
                     <div ref={bottomRef} />
 
                     <div className="grid grid-cols-2 text-3xl py-1.5">
