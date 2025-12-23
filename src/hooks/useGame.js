@@ -27,6 +27,7 @@ export const useGame = (id) => {
                 },
             ],
             gamesWon: { us: 0, them: 0 },
+            updatedAt: Date.now(),
         };
 
         saveGame(newGame);
