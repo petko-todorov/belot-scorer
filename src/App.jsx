@@ -23,6 +23,7 @@ function App() {
             backHandler.then((h) => h.remove());
         };
     }, [location, navigate]);
+
     useEffect(() => {
         const applyTheme = async () => {
             if (Capacitor.isNativePlatform()) {
@@ -37,12 +38,12 @@ function App() {
                         await StatusBar.setBackgroundColor({
                             color: '#121212',
                         });
-                        await StatusBar.setStyle({ style: Style.Dark }); // БЕЛИ икони
+                        await StatusBar.setStyle({ style: Style.Dark });
                     } else {
                         await StatusBar.setBackgroundColor({
                             color: '#ffffff',
                         });
-                        await StatusBar.setStyle({ style: Style.Light }); // ЧЕРНИ икони
+                        await StatusBar.setStyle({ style: Style.Light });
                     }
                 } catch (e) {
                     console.error(e);
