@@ -21,6 +21,8 @@ const Game = () => {
         bottomRef,
         usRef,
         themRef,
+        maxUsInGame,
+        maxThemInGame,
     } = useGame(id);
 
     return (
@@ -42,7 +44,11 @@ const Game = () => {
                 </header>
 
                 <section className="flex-1 overflow-y-auto">
-                    <GameHistory games={game.games} />
+                    <GameHistory
+                        games={game.games}
+                        maxUsInGame={maxUsInGame}
+                        maxThemInGame={maxThemInGame}
+                    />
 
                     <div ref={bottomRef} />
 

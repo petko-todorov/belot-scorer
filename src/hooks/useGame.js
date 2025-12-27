@@ -117,6 +117,9 @@ export const useGame = (id) => {
 
     const currentGame = game.games[game.games.length - 1];
 
+    const maxUsInGame = Math.max(0, ...currentGame.rounds.map((r) => r.us));
+    const maxThemInGame = Math.max(0, ...currentGame.rounds.map((r) => r.them));
+
     return {
         game,
         currentGame,
@@ -131,5 +134,7 @@ export const useGame = (id) => {
         bottomRef,
         usRef,
         themRef,
+        maxUsInGame,
+        maxThemInGame,
     };
 };
