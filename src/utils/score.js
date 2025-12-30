@@ -1,20 +1,26 @@
 export const clampScore = (value) => {
     if (value === '' || value == null) return '';
 
-    let cleaned = String(value);
+    const toStr = String(value);
 
-    const hasPlus = cleaned.includes('+');
-    const hasMinus = cleaned.includes('-');
+    const digits = toStr.replace(/\D/g, '');
 
-    const digitsOnly = cleaned.replace(/\D/g, '');
+    let sign = '';
 
-    if (!digitsOnly) return hasMinus ? '-' : '';
+    if (toStr.includes('-')) {
+        sign = '-';
+    }
 
-    const num = Number(digitsOnly);
-    const clamped = num > 151 ? '151' : digitsOnly;
+    if (toStr.includes('+')) {
+        sign = '';
+    }
 
-    if (hasPlus) return clamped;
-    if (hasMinus) return '-' + clamped;
+    if (!digits) {
+        return sign;
+    }
 
-    return clamped;
+    const num = Number(digits);
+    const clamped = num > 151 ? '151' : digits;
+
+    return sign + clamped;
 };
