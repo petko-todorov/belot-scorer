@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">BelotScorer2</string>
+    <string name="title_activity_main">BelotScorer2</string>
+    <string name="package_name">com.belot.scorer2</string>
+    <string name="custom_url_scheme">com.belot.scorer2</string>
+</resources>
