@@ -1,16 +1,41 @@
-# React + Vite
+# Belot Scorer 2
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Belot Scorer 2** е мобилно приложение за лесно и бързо следене на резултатите при игра на **Бридж-Белот**. Приложението автоматизира изчисляването на точките и поддържа пълна хронология на игрите.
 
-Currently, two official plugins are available:
+**Belot Scorer 2** is a mobile application for easy and fast score tracking for the game **Bridge-Belote**. The app automates point calculations and maintains a full match history.
 
--   [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
--   [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Функционалности / Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* **Български:**
+    * **Автоматично изчисляване:** Следене на резултатите в реално време за двата отбора ("Ние" и "Вие").
+    * **История на игрите:** Пълен запис на всяко раздаване и краен резултат.
+    * **Изчистен интерфейс:** Оптимизиран дизайн за бързо въвеждане.
+* **English:**
+    * **Automatic Calculation:** Real-time score tracking for both teams ("Us" and "Them").
+    * **Game History:** Complete logs of every round and final results.
+    * **Clean Interface:** Optimized design for fast data entry during gameplay.
 
-## Expanding the ESLint configuration
+## 🛠 Технологии / Technologies
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* **React** – Приложението е разработено с React. / Built with React.
+* **Android (APK)** – Налично готово APK за инсталация. / Ready-to-install APK available.
+
+## 📱 Скрийншоти / Screenshots
+
+<p align="center">
+  <img src="screenshots/Screenshot_2026-01-03-18-17-03-411_com.belot.scorer2.jpg" width="200" alt="Start screen">
+  <img src="screenshots/Screenshot_2026-01-03-18-18-32-687_com.belot.scorer2.jpg" width="200" alt="History screen">
+  <img src="screenshots/Screenshot_2026-01-03-18-19-04-506_com.belot.scorer2.jpg" width="200" alt="Game screen">
+</p>
+
+---
+
+## 📥 Инсталация / Installation
+
+Приложението е налично за Android. / The app is available for Android.
+
+👉 **[Изтегли / Download Belot-Scorer-2.apk](https://github.com/petko-todorov/belot-scorer/releases/download/v1.0.0/Belot-Scorer-2.apk)**
+
+---
