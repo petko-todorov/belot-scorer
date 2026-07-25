@@ -81,7 +81,7 @@ export const useGame = (id) => {
             const last = games[games.length - 1];
             const gamesWon = { ...prev.gamesWon };
 
-            if (last.totalUs >= 151) {
+            if (last.totalUs >= 151 && last.totalThem < last.totalUs) {
                 gamesWon.us += 1;
                 last.winner = 'us';
             } else if (last.totalThem >= 151) {
