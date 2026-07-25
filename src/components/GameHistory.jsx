@@ -38,9 +38,17 @@ const GameHistory = ({ games }) => {
                             </div>
 
                             {showFinalTotalSum && (
-                                <div className="grid grid-cols-2 text-3xl py-1 text-center">
+                                <div className="relative grid grid-cols-2 text-3xl py-1 text-center">
                                     <span>{runningUs}</span>
                                     <span>{runningThem}</span>
+
+                                    <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-2xl">
+                                        {g.rounds.length > 0 && (
+                                            <>
+                                                <span>-{g.rounds.length}-</span>
+                                            </>
+                                        )}
+                                    </span>
                                 </div>
                             )}
                         </div>
